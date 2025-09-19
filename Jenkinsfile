@@ -39,4 +39,24 @@ pipeline {
             emailext(
                 to: 'your_email@domain.com',
                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: """<p>Good news!
+                body: """<p>Good news!</p>
+                         <p>Build succeeded for Job <b>${env.JOB_NAME} [${env.BUILD_NUMBER}]</b></p>
+                         <p>Check details at: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                mimeType: 'text/html'
+            )
+        }
+        failure {
+            emailext(
+                to: 'your_email@domain.com',
+                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>Oops!</p>
+                         <p>Build failed for Job <b>${env.JOB_NAME} [${env.BUILD_NUMBER}]</b></p>
+                         <p>Check console output at: <a href='${env.BUILD_URL}console'>Console Log</a></p>""",
+                mimeType: 'text/html'
+            )
+        }
+        always {
+            echo "Pipeline finished. Email sent."
+        }
+    }
+}
