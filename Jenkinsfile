@@ -35,33 +35,23 @@ pipeline {
     }
 
     post {
-        success {
-            emailext(
-                to: 'kaelentruong@gmail.com',
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: """
-                    <p>Good news, your Jenkins pipeline succeeded!</p>
-                    <p><b>Job:</b> ${env.JOB_NAME}</p>
-                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
-                    <p>See details: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>
-                """,
-                mimeType: 'text/html',
-                attachLog: true   // attach full build log
-            )
-        }
-        failure {
-            emailext(
-                to: 'kaelentruong@gmail.com',
-                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: """
-                    <p>Oops, the Jenkins pipeline failed!</p>
-                    <p><b>Job:</b> ${env.JOB_NAME}</p>
-                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
-                    <p>Check the console output here: <a href='${env.BUILD_URL}console'>Console Log</a></p>
-                """,
-                mimeType: 'text/html',
-                attachLog: true   // include the console log automatically
-            )
-        }
+    success {
+        emailext(
+            to: 'kaelentruong@gmail.com',
+            from: 'kaelentruong@gmail.com',
+            subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+            body: """<p>Good news! The build succeeded.</p>"""
+        )
     }
+    failure {
+        emailext(
+            to: 'kaelentruong@gmail.com',
+            from: 'kaelentruong@gmail.com',
+            subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+            body: """<p>Build failed. Check console output: ${env.BUILD_URL}console</p>""",
+            attachLog: true
+        )
+    }
+}
+
 }
