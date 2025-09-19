@@ -37,7 +37,7 @@ pipeline {
     post {
         success {
             emailext(
-                to: 'your_email@domain.com',
+                to: 'truongvinhkhang0609@gmail.com',
                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: """<p>Good news!</p>
                          <p>Build succeeded for Job <b>${env.JOB_NAME} [${env.BUILD_NUMBER}]</b></p>
@@ -47,7 +47,7 @@ pipeline {
         }
         failure {
             emailext(
-                to: 'your_email@domain.com',
+                to: 'truongvinhkhang0609@gmail.com',
                 subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: """<p>Oops!</p>
                          <p>Build failed for Job <b>${env.JOB_NAME} [${env.BUILD_NUMBER}]</b></p>
@@ -60,3 +60,4 @@ pipeline {
         }
     }
 }
+// Jenkinsfile for CI/CD Pipeline with Email Notifications
