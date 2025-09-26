@@ -16,7 +16,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Continue even if tests fail
+                // continue even if tests fail so later stages still run
                 bat 'npm test || exit /b 0'
             }
         }
@@ -35,23 +35,24 @@ pipeline {
     }
 
     post {
-    success {
-        emailext(
-            to: 'kaelentruong@gmail.com',
-            from: 'kaelentruong@gmail.com',
-            subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-            body: """<p>Good news! The build succeeded.</p>"""
-        )
+        success {
+            emailext(
+                to: 'truongvinhkhang0609@gmail.com',
+                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>✅ Good news! The build <b>succeeded</b>.</p>
+                         <p>View build details: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                mimeType: 'text/html'
+            )
+        }
+        failure {
+            emailext(
+                to: 'truongvinhkhang0609@gmail.com',
+                subject: " FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p> The build <b>failed</b>.</p>
+                         <p>Console output: <a href='${env.BUILD_URL}console'>${env.BUILD_URL}console</a></p>""",
+                mimeType: 'text/html',
+                attachLog: true
+            )
+        }
     }
-    failure {
-        emailext(
-            to: 'kaelentruong@gmail.com',
-            from: 'kaelentruong@gmail.com',
-            subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-            body: """<p>Build failed. Check console output: ${env.BUILD_URL}console</p>""",
-            attachLog: true
-        )
-    }
-}
-
 }
